@@ -1,3 +1,4 @@
+import { AuthProvider } from './context/AuthContext';
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
@@ -6,10 +7,9 @@ import './styles/App.css'
 import Chat from './components/Chat'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
+    <AuthProvider>
+
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
@@ -116,8 +116,8 @@ function App() {
 
       <div className="ticks"></div>
       <section id="spacer"></section>
-    </>
-  )
+     </AuthProvider>
+  );
 }
 
-export default App
+export default App;
