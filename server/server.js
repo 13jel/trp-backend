@@ -8,8 +8,6 @@ import messagesRouter from "./routes/messages.js";
 
 dotenv.config();
 
-console.log("Start");
-
 let app = express();
 
 app.use(express.json()); 
