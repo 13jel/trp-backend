@@ -1,6 +1,10 @@
 import { useProducts } from '../hooks/useProducts';
 import ProductCard from '../components/ProductCard';
 
+import { Link } from 'react-router-dom';
+// ... överst i return-satsen, före resten:
+
+
 export default function ProductList() {
   const { products, loading, error } = useProducts();
 
@@ -12,6 +16,7 @@ export default function ProductList() {
     <div className="product-list">
       <h1>Produkter</h1>
       <div className="product-grid">
+        <Link to="/admin/products">Gå till admin</Link>
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
