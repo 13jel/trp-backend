@@ -78,28 +78,45 @@ export default function AdminProducts() {
       <h1>Admin – Produkter</h1>
 
       <section>
-        <h2>{duplicateSource ? 'Duplicerar produkt' : 'Lägg till ny produkt'}</h2>
-        {duplicateSource && (
-          <p className="duplicate-hint">
-            Fälten är förifyllda från originalet, inklusive bilden. Ändra typ (t.ex. Tyg → Tapet), justera pris/lager, eller ladda upp en ny bild vid behov.{' '}
-            <button type="button" onClick={() => setDuplicateSource(null)}>Avbryt duplicering</button>
-          </p>
-        )}
-        <ProductForm
-          key={duplicateSource ? duplicateSource.name : 'new'}
-          initialProduct={duplicateSource}
-          mode="create"
-          onSubmit={handleCreate}
-        />
+        {justCreated ? (
+          <div className="created-confirmation">
+            <div className="created-banner">
+              <span className="created-check">✓</span>
+              <div>
+                <strong>{justCreated.name}</strong> sparad i butiken.
+                <p>
+                  Bilder du laddar upp här nedan sparas direkt till <strong>{justCreated.name}</strong> —
+                  ingen extra sparaknapp behövs. Lägg till så många du vill, eller gå vidare direkt.
+                </p>
+              </div>
+            </div>
 
-        {justCreated && (
-          <div className="just-created-block">
-            <p className="duplicate-hint">
-              "{justCreated.name}" sparad. Lägg gärna till fler bilder (t.ex. i miljö) innan du går vidare.{' '}
-              <button type="button" onClick={() => setJustCreated(null)}>Klar, lägg till nästa</button>
-            </p>
             <ProductGallery productId={justCreated.id} />
+
+            <button
+              type="button"
+              className="finish-button"
+              onClick={() => setJustCreated(null)}
+            >
+              Klar med {justCreated.name} – lägg till nästa produkt
+            </button>
           </div>
+        ) : (
+          <>
+            <h2>{duplicateSource ? 'Duplicerar produkt' : 'Lägg till ny produkt'}</h2>
+            {duplicateSource && (
+              <p className="duplicate-hint">
+                Fälten är förifyllda från originalet, inklusive bilden. Ändra typ (t.ex. Tyg → Tapet), justera pris/lager, eller ladda upp en ny bild vid behov.{' '}
+                <button type="button" onClick={() => setDuplicateSource(null)}>Avbryt duplicering</button>
+              </p>
+            )}
+            <ProductForm
+              key={duplicateSource ? duplicateSource.name : 'new'}
+              initialProduct={duplicateSource}
+              mode="create"
+              onSubmit={handleCreate}
+            />
+          </>
         )}
       </section>
 
