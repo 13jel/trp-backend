@@ -47,4 +47,13 @@ productsRouter.put("/:id", requireAuth, requireAdmin, async (req: AuthRequest, r
   res.json(data);
 });
 
+productsRouter.delete("/:id", requireAuth, requireAdmin, async (req: AuthRequest, res: Response) => {
+  const { error } = await supabaseAdmin
+    .from("products")
+    .update({ is_active: false })
+    .eq("id", req.params.id);
+  if (error) return res.status(500).json({ error: error.message });
+  res.status(204).send();
+});
+
 export default productsRouter;

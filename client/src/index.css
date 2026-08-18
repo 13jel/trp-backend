@@ -336,6 +336,16 @@ textarea:focus-visible {
   box-shadow: 7px 7px 0 var(--color-ink);
 }
 
+.danger-button {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.danger-button:hover:not(:disabled) {
+  background: var(--color-error);
+  color: var(--color-paper-light);
+}
+
 /* ===== Product grid & cards ===== */
 .product-list {
   max-width: 1100px;
@@ -612,7 +622,7 @@ form textarea {
 
 .admin-product-row {
   display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  grid-template-columns: 1fr auto auto auto auto auto;
   align-items: center;
   gap: 1rem;
   background: var(--color-paper-light);

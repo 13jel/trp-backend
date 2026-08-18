@@ -21,3 +21,10 @@ export function updateProduct(token, id, updates) {
     body: JSON.stringify(updates),
   });
 }
+
+export function deleteProduct(token, id) {
+  return apiFetch(`/api/products/${id}`, {
+    method: 'DELETE',
+    token,
+  });
+}
