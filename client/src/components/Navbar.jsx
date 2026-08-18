@@ -12,15 +12,12 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar-brand">The Rooted Pages</Link>
+      <Link to="/" className="navbar-brand">TRP</Link>
 
       <div className="navbar-links">
         <Link to="/products">Produkter</Link>
-
         {session && <Link to="/cart">Varukorg</Link>}
-
         {isAdmin && <Link to="/admin/products">Admin</Link>}
-
         {session ? (
           <button onClick={handleSignOut}>Logga ut</button>
         ) : (

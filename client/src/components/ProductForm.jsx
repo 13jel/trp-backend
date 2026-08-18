@@ -8,6 +8,7 @@ const emptyProduct = {
   stock: '',
   image_url: '',
   category: '',
+  theme: '',
 };
 
 const MAX_DIMENSION = 1600; // px, mer än nog för webbvisning
@@ -178,8 +179,22 @@ export default function ProductForm({ initialProduct, onSubmit, onCancel }) {
       )}
 
       <label>
-        Kategori
-        <input name="category" value={form.category} onChange={handleChange} />
+        Typ
+        <select name="category" value={form.category} onChange={handleChange} required>
+          <option value="">Välj typ</option>
+          <option value="Posters">Posters</option>
+          <option value="Tyger & tapeter">Tyger & tapeter</option>
+        </select>
+      </label>
+
+      <label>
+        Tema
+        <input
+          name="theme"
+          value={form.theme || ''}
+          onChange={handleChange}
+          placeholder="t.ex. Djur, Musik, Botanik"
+        />
       </label>
 
       {error && <p className="form-error">{error}</p>}
