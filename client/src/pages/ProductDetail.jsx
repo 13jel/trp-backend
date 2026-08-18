@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useProduct } from '../hooks/useProduct';
+import { parseThemes } from '../utils/theme';
 import { addToCart } from '../api/cart';
 
 export default function ProductDetail() {
@@ -66,6 +67,14 @@ export default function ProductDetail() {
         <div className="product-detail-info">
           <h1>{product.name}</h1>
           {product.category && <p className="category-tag">{product.category}</p>}
+
+          {parseThemes(product.theme).length > 0 && (
+            <div className="theme-tags">
+              {parseThemes(product.theme).map((theme) => (
+                <span key={theme} className="theme-tag">{theme}</span>
+              ))}
+            </div>
+          )}
           {product.description && <p className="description">{product.description}</p>}
 
           <p className="price">{product.price} slantar</p>

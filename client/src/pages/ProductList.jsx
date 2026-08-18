@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useProducts } from '../hooks/useProducts';
 import ProductCard from '../components/ProductCard';
+import { parseThemes } from '../utils/theme';
 
 const TYPES = ['Posters', 'Tyger & tapeter'];
 
@@ -10,13 +11,13 @@ export default function ProductList() {
   const [activeTheme, setActiveTheme] = useState('Alla');
 
   const themes = useMemo(() => {
-    const unique = new Set(products.map((p) => p.theme).filter(Boolean));
+    const unique = new Set(products.flatMap((p) => parseThemes(p.theme)));
     return ['Alla', ...Array.from(unique).sort()];
   }, [products]);
 
   const filtered = products.filter((p) => {
     const typeMatch = activeType === 'Alla' || p.category === activeType;
-    const themeMatch = activeTheme === 'Alla' || p.theme === activeTheme;
+    const themeMatch = activeTheme === 'Alla' || parseThemes(p.theme).includes(activeTheme);
     return typeMatch && themeMatch;
   });
 

@@ -10,7 +10,7 @@ export default function ProductCard({ product }) {
   const [status, setStatus] = useState('idle');
 
   async function handleAddToCart(e) {
-    e.preventDefault(); 
+    e.preventDefault();
     e.stopPropagation();
 
     if (!session) {
@@ -31,7 +31,6 @@ export default function ProductCard({ product }) {
     <Link to={`/products/${product.id}`} className="product-card">
       {product.image_url && <img src={product.image_url} alt={product.name} />}
       <h3>{product.name}</h3>
-      {product.description && <p>{product.description}</p>}
       <p className="price">{product.price} slantar</p>
       <p className="stock">
         {product.stock > 0 ? `${product.stock} i lager` : 'Slut i lager'}
