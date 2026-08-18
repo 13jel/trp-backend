@@ -121,7 +121,8 @@ export default function ProductForm({ initialProduct, mode = 'create', onSubmit,
         <select name="category" value={form.category} onChange={handleChange} required>
           <option value="">Välj typ</option>
           <option value="Posters">Posters</option>
-          <option value="Tyger & tapeter">Tyger & tapeter</option>
+          <option value="Tyg">Tyg</option>
+          <option value="Tapet">Tapet</option>
         </select>
       </label>
 

@@ -41,7 +41,7 @@ export default function AdminProducts() {
       description: product.description,
       price: product.price,
       stock: product.stock,
-      image_url: '',
+      image_url: product.image_url,
       category: product.category,
       theme: product.theme,
     });
@@ -78,7 +78,7 @@ export default function AdminProducts() {
         <h2>{duplicateSource ? 'Duplicerar produkt' : 'Lägg till ny produkt'}</h2>
         {duplicateSource && (
           <p className="duplicate-hint">
-            Fälten är förifyllda från originalet. Ladda upp en ny bild och justera namn/beskrivning vid behov.{' '}
+            Fälten är förifyllda från originalet, inklusive bilden. Ändra typ (t.ex. Tyg → Tapet), justera pris/lager, eller ladda upp en ny bild vid behov.{' '}
             <button type="button" onClick={() => setDuplicateSource(null)}>Avbryt duplicering</button>
           </p>
         )}

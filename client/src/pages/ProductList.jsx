@@ -3,7 +3,7 @@ import { useProducts } from '../hooks/useProducts';
 import ProductCard from '../components/ProductCard';
 import { parseThemes } from '../utils/theme';
 
-const TYPES = ['Posters', 'Tyger & tapeter'];
+const TYPES = ['Posters', 'Tyg', 'Tapet'];
 
 export default function ProductList() {
   const { products, loading, error } = useProducts();
