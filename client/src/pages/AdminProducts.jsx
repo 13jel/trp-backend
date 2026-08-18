@@ -13,6 +13,7 @@ export default function AdminProducts() {
   const [editingId, setEditingId] = useState(null);
   const [duplicateSource, setDuplicateSource] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  const [justCreated, setJustCreated] = useState(null);
 
   useEffect(() => {
     if (!token) return;
@@ -27,6 +28,7 @@ export default function AdminProducts() {
     const newProduct = await createProduct(token, product);
     setProducts((prev) => [...prev, newProduct]);
     setDuplicateSource(null);
+    setJustCreated(newProduct); // öppnar galleri-hanteraren för den nya produkten
   }
 
   async function handleUpdate(id, updates) {
@@ -36,6 +38,7 @@ export default function AdminProducts() {
   }
 
   function handleDuplicate(product) {
+    setJustCreated(null);
     setDuplicateSource({
       name: `${product.name} (kopia)`,
       description: product.description,
@@ -88,6 +91,16 @@ export default function AdminProducts() {
           mode="create"
           onSubmit={handleCreate}
         />
+
+        {justCreated && (
+          <div className="just-created-block">
+            <p className="duplicate-hint">
+              "{justCreated.name}" sparad. Lägg gärna till fler bilder (t.ex. i miljö) innan du går vidare.{' '}
+              <button type="button" onClick={() => setJustCreated(null)}>Klar, lägg till nästa</button>
+            </p>
+            <ProductGallery productId={justCreated.id} />
+          </div>
+        )}
       </section>
 
       <section>

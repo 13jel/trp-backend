@@ -27,10 +27,10 @@ productsRouter.get("/:id", async (req: Request, res: Response) => {
 });
 
 productsRouter.post("/", requireAuth, requireAdmin, async (req: AuthRequest, res: Response) => {
-  const { name, description, price, stock, image_url, category } = req.body;
+  const { name, description, price, stock, image_url, category, theme } = req.body;
   const { data, error } = await supabaseAdmin
     .from("products")
-    .insert({ name, description, price, stock, image_url, category })
+    .insert({ name, description, price, stock, image_url, category, theme })
     .select()
     .single();
   if (error) return res.status(500).json({ error: error.message });
