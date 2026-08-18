@@ -16,6 +16,7 @@ export default function Navbar() {
 
       <div className="navbar-links">
         <Link to="/products">Produkter</Link>
+        <Link to="/gallery">Galleri</Link>
         {session && <Link to="/cart">Varukorg</Link>}
         {session && <Link to="/account">Mina sidor</Link>}
         {isAdmin && <Link to="/admin/products">Admin</Link>}

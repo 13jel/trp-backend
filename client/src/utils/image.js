@@ -19,7 +19,13 @@ export function resizeImage(file, maxDimension = MAX_DIMENSION) {
       const canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
-      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      const ctx = canvas.getContext('2d');
+
+      // Fyll bakgrunden vit innan bilden ritas, annars blir genomskinliga
+      // områden svarta när canvasen exporteras som JPEG (ingen alfakanal)
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, width, height);
+      ctx.drawImage(img, 0, 0, width, height);
 
       canvas.toBlob(
         (blob) => {

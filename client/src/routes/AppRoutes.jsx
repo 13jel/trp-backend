@@ -10,6 +10,8 @@ import PrivateRoute from './PrivateRoute';
 import AdminProducts from '../pages/AdminProducts';
 import AdminOrders from '../pages/AdminOrders';
 import AdminRoute from './AdminRoute';
+import Gallery from '../pages/Gallery';
+import AdminGallery from '../pages/AdminGallery';
 
 export default function AppRoutes() {
   return (
@@ -21,6 +23,8 @@ export default function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/account" element={ <PrivateRoute> <Account /> </PrivateRoute>} />
+      <Route path="/gallery" element={<Gallery />} />
+      <Route path="/admin/gallery" element={ <AdminRoute> <AdminGallery /> </AdminRoute> } />
 
       <Route
         path="/admin/products"

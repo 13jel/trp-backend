@@ -36,8 +36,9 @@ export default function AdminOrders() {
   return (
     <div className="admin-orders">
       <nav className="admin-subnav">
-        <Link to="/admin/products">Produkter</Link>
-        <Link to="/admin/orders" className="active">Ordrar</Link>
+        <Link to="/admin/products" className="active">Produkter</Link>
+        <Link to="/admin/orders">Ordrar</Link>
+        <Link to="/admin/gallery">Galleri</Link>
       </nav>
 
       <h1>Admin – Ordrar</h1>

@@ -73,6 +73,7 @@ export default function AdminProducts() {
       <nav className="admin-subnav">
         <Link to="/admin/products" className="active">Produkter</Link>
         <Link to="/admin/orders">Ordrar</Link>
+        <Link to="/admin/gallery">Galleri</Link>
       </nav>
 
       <h1>Admin – Produkter</h1>
