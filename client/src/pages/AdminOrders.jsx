@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchAllOrders, updateOrderStatus } from '../api/adminOrders';
 
@@ -32,13 +33,18 @@ export default function AdminOrders() {
     }
   }
 
-  if (loading) return <p>Laddar...</p>;
-  if (error) return <p className="form-error">{error}</p>;
-  if (orders.length === 0) return <p>Inga ordrar än.</p>;
-
   return (
     <div className="admin-orders">
+      <nav className="admin-subnav">
+        <Link to="/admin/products">Produkter</Link>
+        <Link to="/admin/orders" className="active">Ordrar</Link>
+      </nav>
+
       <h1>Admin – Ordrar</h1>
+
+      {loading && <p>Laddar...</p>}
+      {error && <p className="form-error">{error}</p>}
+      {!loading && orders.length === 0 && <p>Inga ordrar än.</p>}
 
       <ul className="admin-order-list">
         {orders.map((order) => (

@@ -19,12 +19,7 @@ export default function Navbar() {
 
         {session && <Link to="/cart">Varukorg</Link>}
 
-        {isAdmin && (
-          <>
-            <Link to="/admin/products">Admin – Produkter</Link>
-            <Link to="/admin/orders">Admin – Ordrar</Link>
-          </>
-        )}
+        {isAdmin && <Link to="/admin/products">Admin</Link>}
 
         {session ? (
           <button onClick={handleSignOut}>Logga ut</button>

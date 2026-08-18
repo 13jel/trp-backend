@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { addToCart } from '../api/cart';
 
@@ -7,9 +7,12 @@ export default function ProductCard({ product }) {
   const { token, session } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [status, setStatus] = useState('idle'); // idle | loading | done | error
+  const [status, setStatus] = useState('idle');
 
-  async function handleAddToCart() {
+  async function handleAddToCart(e) {
+    e.preventDefault(); // hindrar Link-navigeringen
+    e.stopPropagation();
+
     if (!session) {
       navigate('/login', { state: { from: location } });
       return;
@@ -25,7 +28,7 @@ export default function ProductCard({ product }) {
   }
 
   return (
-    <div className="product-card">
+    <Link to={`/products/${product.id}`} className="product-card">
       {product.image_url && <img src={product.image_url} alt={product.name} />}
       <h3>{product.name}</h3>
       {product.description && <p>{product.description}</p>}
@@ -43,6 +46,6 @@ export default function ProductCard({ product }) {
         {status === 'idle' && 'Lägg i varukorg'}
         {status === 'error' && 'Något gick fel'}
       </button>
-    </div>
+    </Link>
   );
 }

@@ -14,6 +14,17 @@ productsRouter.get("/", async (req: Request, res: Response) => {
   res.json(data);
 });
 
+productsRouter.get("/:id", async (req: Request, res: Response) => {
+  const { data, error } = await supabaseAdmin
+    .from("products")
+    .select("*")
+    .eq("id", req.params.id)
+    .eq("is_active", true)
+    .single();
+  if (error) return res.status(404).json({ error: "Produkten hittades inte" });
+  res.json(data);
+});
+
 productsRouter.post("/", requireAuth, requireAdmin, async (req: AuthRequest, res: Response) => {
   const { name, description, price, stock, image_url, category } = req.body;
   const { data, error } = await supabaseAdmin

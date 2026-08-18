@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchAllProductsAdmin, createProduct, updateProduct } from '../api/adminProducts';
 import ProductForm from '../components/ProductForm';
@@ -35,6 +36,11 @@ export default function AdminProducts() {
 
   return (
     <div className="admin-products">
+      <nav className="admin-subnav">
+        <Link to="/admin/products" className="active">Produkter</Link>
+        <Link to="/admin/orders">Ordrar</Link>
+      </nav>
+
       <h1>Admin – Produkter</h1>
 
       <section>

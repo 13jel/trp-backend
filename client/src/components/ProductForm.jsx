@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { supabase } from '../api/supabaseClient';
 
 const emptyProduct = {
   name: '',
@@ -11,7 +12,10 @@ const emptyProduct = {
 
 export default function ProductForm({ initialProduct, onSubmit, onCancel }) {
   const [form, setForm] = useState(initialProduct || emptyProduct);
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(initialProduct?.image_url || null);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
 
   function handleChange(e) {
@@ -19,17 +23,54 @@ export default function ProductForm({ initialProduct, onSubmit, onCancel }) {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
+  function handleFileChange(e) {
+    const selected = e.target.files?.[0];
+    if (!selected) return;
+    setFile(selected);
+    setPreview(URL.createObjectURL(selected));
+  }
+
+  async function uploadImage() {
+    setUploading(true);
+    const ext = file.name.split('.').pop();
+    const path = `${crypto.randomUUID()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('product-images')
+      .upload(path, file);
+
+    setUploading(false);
+
+    if (uploadError) {
+      throw new Error(`Bilduppladdning misslyckades: ${uploadError.message}`);
+    }
+
+    const { data } = supabase.storage.from('product-images').getPublicUrl(path);
+    return data.publicUrl;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
     setError(null);
     try {
+      let image_url = form.image_url;
+      if (file) {
+        image_url = await uploadImage();
+      }
+
       await onSubmit({
         ...form,
+        image_url,
         price: parseFloat(form.price),
         stock: parseInt(form.stock, 10),
       });
-      if (!initialProduct) setForm(emptyProduct);
+
+      if (!initialProduct) {
+        setForm(emptyProduct);
+        setFile(null);
+        setPreview(null);
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -75,9 +116,17 @@ export default function ProductForm({ initialProduct, onSubmit, onCancel }) {
       </label>
 
       <label>
-        Bild-URL
-        <input name="image_url" value={form.image_url} onChange={handleChange} />
+        Produktbild
+        <input type="file" accept="image/*" onChange={handleFileChange} />
       </label>
+
+      {preview && (
+        <img
+          src={preview}
+          alt="Förhandsvisning"
+          style={{ width: 120, height: 120, objectFit: 'cover', border: '2.5px solid var(--color-ink)', borderRadius: 8 }}
+        />
+      )}
 
       <label>
         Kategori
@@ -88,7 +137,7 @@ export default function ProductForm({ initialProduct, onSubmit, onCancel }) {
 
       <div className="form-actions">
         <button type="submit" disabled={saving}>
-          {saving ? 'Sparar...' : initialProduct ? 'Spara ändringar' : 'Lägg till produkt'}
+          {uploading ? 'Laddar upp bild...' : saving ? 'Sparar...' : initialProduct ? 'Spara ändringar' : 'Lägg till produkt'}
         </button>
         {onCancel && (
           <button type="button" onClick={onCancel} disabled={saving}>
