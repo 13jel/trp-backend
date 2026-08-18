@@ -5,14 +5,23 @@ import { parseThemes } from '../utils/theme';
 
 const TYPES = ['Posters', 'Tyg', 'Tapet'];
 
+const SORT_OPTIONS = {
+  'name-asc': { label: 'Namn (A–Ö)', compare: (a, b) => a.name.localeCompare(b.name, 'sv') },
+  'name-desc': { label: 'Namn (Ö–A)', compare: (a, b) => b.name.localeCompare(a.name, 'sv') },
+  'price-asc': { label: 'Pris (lägst först)', compare: (a, b) => a.price - b.price },
+  'price-desc': { label: 'Pris (högst först)', compare: (a, b) => b.price - a.price },
+  'newest': { label: 'Nyast', compare: (a, b) => new Date(b.created_at) - new Date(a.created_at) },
+};
+
 export default function ProductList() {
   const { products, loading, error } = useProducts();
   const [activeType, setActiveType] = useState('Alla');
   const [activeTheme, setActiveTheme] = useState('Alla');
+  const [sortKey, setSortKey] = useState('name-asc');
 
   const themes = useMemo(() => {
     const unique = new Set(products.flatMap((p) => parseThemes(p.theme)));
-    return ['Alla', ...Array.from(unique).sort()];
+    return ['Alla', ...Array.from(unique).sort((a, b) => a.localeCompare(b, 'sv'))];
   }, [products]);
 
   const filtered = products.filter((p) => {
@@ -20,6 +29,8 @@ export default function ProductList() {
     const themeMatch = activeTheme === 'Alla' || parseThemes(p.theme).includes(activeTheme);
     return typeMatch && themeMatch;
   });
+
+  const sorted = [...filtered].sort(SORT_OPTIONS[sortKey].compare);
 
   if (loading) return <p>Laddar produkter...</p>;
   if (error) return <p>Kunde inte hämta produkter: {error}</p>;
@@ -48,25 +59,38 @@ export default function ProductList() {
           ))}
         </div>
 
-        {themes.length > 1 && (
+        <div className="filter-bar-right">
+          {themes.length > 1 && (
+            <label className="theme-select">
+              Tema
+              <select value={activeTheme} onChange={(e) => setActiveTheme(e.target.value)}>
+                {themes.map((theme) => (
+                  <option key={theme} value={theme}>
+                    {theme}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+
           <label className="theme-select">
-            Tema
-            <select value={activeTheme} onChange={(e) => setActiveTheme(e.target.value)}>
-              {themes.map((theme) => (
-                <option key={theme} value={theme}>
-                  {theme}
+            Sortera
+            <select value={sortKey} onChange={(e) => setSortKey(e.target.value)}>
+              {Object.entries(SORT_OPTIONS).map(([key, { label }]) => (
+                <option key={key} value={key}>
+                  {label}
                 </option>
               ))}
             </select>
           </label>
-        )}
+        </div>
       </div>
 
-      {filtered.length === 0 ? (
+      {sorted.length === 0 ? (
         <p>Inga produkter matchar filtret.</p>
       ) : (
         <div className="product-grid">
-          {filtered.map((product) => (
+          {sorted.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
