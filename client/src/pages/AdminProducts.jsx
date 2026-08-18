@@ -11,16 +11,13 @@ export default function AdminProducts() {
   const [error, setError] = useState(null);
   const [editingId, setEditingId] = useState(null);
 
-  function loadProducts() {
-    setLoading(true);
+  useEffect(() => {
+    if (!token) return;
+
     fetchAllProductsAdmin(token)
       .then(setProducts)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }
-
-  useEffect(() => {
-    if (token) loadProducts();
   }, [token]);
 
   async function handleCreate(product) {

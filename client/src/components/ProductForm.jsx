@@ -10,6 +10,49 @@ const emptyProduct = {
   category: '',
 };
 
+const MAX_DIMENSION = 1600; // px, mer än nog för webbvisning
+
+function resizeImage(file, maxDimension = MAX_DIMENSION) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      let { width, height } = img;
+
+      if (width > height && width > maxDimension) {
+        height = Math.round((height * maxDimension) / width);
+        width = maxDimension;
+      } else if (height > maxDimension) {
+        width = Math.round((width * maxDimension) / height);
+        height = maxDimension;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => {
+          URL.revokeObjectURL(objectUrl);
+          if (!blob) return reject(new Error('Kunde inte bearbeta bilden'));
+          resolve(new File([blob], file.name.replace(/\.\w+$/, '.jpg'), { type: 'image/jpeg' }));
+        },
+        'image/jpeg',
+        0.85 // kvalitet 0-1
+      );
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('Kunde inte läsa bildfilen'));
+    };
+
+    img.src = objectUrl;
+  });
+}
+
 export default function ProductForm({ initialProduct, onSubmit, onCancel }) {
   const [form, setForm] = useState(initialProduct || emptyProduct);
   const [file, setFile] = useState(null);
@@ -23,17 +66,23 @@ export default function ProductForm({ initialProduct, onSubmit, onCancel }) {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleFileChange(e) {
+  async function handleFileChange(e) {
     const selected = e.target.files?.[0];
     if (!selected) return;
-    setFile(selected);
-    setPreview(URL.createObjectURL(selected));
+
+    setError(null);
+    try {
+      const resized = await resizeImage(selected);
+      setFile(resized);
+      setPreview(URL.createObjectURL(resized));
+    } catch (err) {
+      setError(`Kunde inte bearbeta bilden: ${err.message}`);
+    }
   }
 
   async function uploadImage() {
     setUploading(true);
-    const ext = file.name.split('.').pop();
-    const path = `${crypto.randomUUID()}.${ext}`;
+    const path = `${crypto.randomUUID()}.jpg`;
 
     const { error: uploadError } = await supabase.storage
       .from('product-images')
@@ -124,7 +173,7 @@ export default function ProductForm({ initialProduct, onSubmit, onCancel }) {
         <img
           src={preview}
           alt="Förhandsvisning"
-          style={{ width: 120, height: 120, objectFit: 'cover', border: '2.5px solid var(--color-ink)', borderRadius: 8 }}
+          style={{ width: 120, height: 150, objectFit: 'contain', border: '2.5px solid var(--color-ink)', borderRadius: 8, background: 'var(--color-paper)' }}
         />
       )}
 

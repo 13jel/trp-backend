@@ -35,7 +35,7 @@ export default function ProductDetail() {
       <Link to="/products" className="back-link">← Tillbaka till produkter</Link>
 
       <div className="product-detail-layout">
-        {product.image_url && <img src={product.image_url} alt={product.name} />}
+        {product.image_url && <img src={product.image_url} alt={product.name + ' - ' + product.description} />}
 
         <div className="product-detail-info">
           <h1>{product.name}</h1>
