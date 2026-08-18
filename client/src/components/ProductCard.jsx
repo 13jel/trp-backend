@@ -30,21 +30,24 @@ export default function ProductCard({ product }) {
   return (
     <Link to={`/products/${product.id}`} className="product-card">
       {product.image_url && <img src={product.image_url} alt={product.name} />}
-      <h3>{product.name}</h3>
-      <p className="price">{product.price} slantar</p>
-      <p className="stock">
-        {product.stock > 0 ? `${product.stock} i lager` : 'Slut i lager'}
-      </p>
 
-      <button
-        onClick={handleAddToCart}
-        disabled={product.stock === 0 || status === 'loading'}
-      >
-        {status === 'loading' && 'Lägger till...'}
-        {status === 'done' && 'Tillagd!'}
-        {status === 'idle' && 'Lägg i varukorg'}
-        {status === 'error' && 'Något gick fel'}
-      </button>
+      <div className="product-card-body">
+        <h3>{product.name}</h3>
+        <p className="price">{product.price} slantar</p>
+        <p className="stock">
+          {product.stock > 0 ? `${product.stock} i lager` : 'Slut i lager'}
+        </p>
+
+        <button
+          onClick={handleAddToCart}
+          disabled={product.stock === 0 || status === 'loading'}
+        >
+          {status === 'loading' && 'Lägger till...'}
+          {status === 'done' && 'Tillagd!'}
+          {status === 'idle' && 'Lägg i varukorg'}
+          {status === 'error' && 'Något gick fel'}
+        </button>
+      </div>
     </Link>
   );
 }

@@ -18,6 +18,7 @@ export default function ProductList() {
   const [activeType, setActiveType] = useState('Alla');
   const [activeTheme, setActiveTheme] = useState('Alla');
   const [sortKey, setSortKey] = useState('name-asc');
+  const [view, setView] = useState('grid'); // 'grid' | 'list'
 
   const themes = useMemo(() => {
     const unique = new Set(products.flatMap((p) => parseThemes(p.theme)));
@@ -83,13 +84,34 @@ export default function ProductList() {
               ))}
             </select>
           </label>
+
+          <div className="view-toggle">
+            <button
+              type="button"
+              className={view === 'grid' ? 'active' : ''}
+              onClick={() => setView('grid')}
+              aria-label="Visa som rutor"
+              title="Rutor"
+            >
+              ▦
+            </button>
+            <button
+              type="button"
+              className={view === 'list' ? 'active' : ''}
+              onClick={() => setView('list')}
+              aria-label="Visa som lista"
+              title="Lista"
+            >
+              ☰
+            </button>
+          </div>
         </div>
       </div>
 
       {sorted.length === 0 ? (
         <p>Inga produkter matchar filtret.</p>
       ) : (
-        <div className="product-grid">
+        <div className={`product-grid view-${view}`}>
           {sorted.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
