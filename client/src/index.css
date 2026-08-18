@@ -1,6 +1,4 @@
-/* =============================================================
-   1. DESIGN TOKENS
-   ============================================================= */
+/* DESIGN TOKENS */
 :root {
   --color-paper: #e8ddc1;
   --color-paper-light: #f7f1e1;
@@ -22,9 +20,7 @@
   --shadow-hard-sm: 3px 3px 0 var(--color-ink);
 }
 
-/* =============================================================
-   2. BASE / RESET
-   ============================================================= */
+/* BASE / RESET */
 * {
   box-sizing: border-box;
 }
@@ -50,9 +46,7 @@ a {
   color: var(--color-currant);
 }
 
-/* =============================================================
-   3. BUTTONS (global defaults)
-   ============================================================= */
+/* BUTTONS (global defaults) */
 button {
   font-family: var(--font-body);
   font-weight: 600;
@@ -102,9 +96,7 @@ textarea:focus-visible {
   outline-offset: 2px;
 }
 
-/* =============================================================
-   4. FORMS (login, product form, generic)
-   ============================================================= */
+/* FORMS (login, product form, generic) */
 form label {
   display: flex;
   flex-direction: column;
@@ -149,9 +141,7 @@ form textarea {
   box-shadow: var(--shadow-hard);
 }
 
-/* =============================================================
-   5. NAVBAR
-   ============================================================= */
+/* NAVBAR */
 .navbar {
   display: flex;
   align-items: center;
@@ -219,9 +209,7 @@ form textarea {
   border-color: var(--color-gold);
 }
 
-/* =============================================================
-   6. HOME / HERO
-   ============================================================= */
+/* HOME / HERO */
 .home-page {
   display: flex;
   flex-direction: column;
@@ -263,7 +251,7 @@ form textarea {
   box-shadow: 7px 7px 0 var(--color-ink);
 }
 
-/* ---- Hero carousel ---- */
+/* Hero carousel */
 .hero-carousel {
   max-width: 760px;
   width: 100%;
@@ -338,9 +326,7 @@ form textarea {
   }
 }
 
-/* =============================================================
-   7. PRODUCT LIST + FILTER BAR
-   ============================================================= */
+/* PRODUCT LIST + FILTER BAR */
 .product-list {
   max-width: 1100px;
   margin: 0 auto;
@@ -397,9 +383,7 @@ form textarea {
   font-family: var(--font-body);
 }
 
-/* =============================================================
-   8. PRODUCT CARD
-   ============================================================= */
+/* PRODUCT CARD */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -474,9 +458,7 @@ a.product-card {
   margin-top: auto;
 }
 
-/* =============================================================
-   9. PRODUCT DETAIL
-   ============================================================= */
+/* PRODUCT DETAIL */
 .product-detail {
   max-width: 720px;
   margin: 0 auto;
@@ -593,7 +575,7 @@ a.product-card {
   border-radius: 6px;
 }
 
-/* ---- Lightbox ---- */
+/* Lightbox */
 .lightbox-overlay {
   position: fixed;
   inset: 0;
@@ -627,9 +609,7 @@ a.product-card {
   z-index: 1001;
 }
 
-/* =============================================================
-   10. CART
-   ============================================================= */
+/* CART */
 .cart-page {
   max-width: 720px;
   margin: 0 auto;
@@ -696,9 +676,71 @@ a.product-card {
   gap: 0.75rem;
 }
 
-/* =============================================================
-   11. ADMIN — shared
-   ============================================================= */
+/* Account / Mina sidor */
+.account-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+.account-section {
+  background: var(--color-paper-light);
+  border: var(--border-thick);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-hard-sm);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.save-confirmation {
+  color: var(--color-moss-dark);
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.my-order-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.my-order-row {
+  border: 2px dashed var(--color-ink);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.my-order-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.status-badge {
+  font-size: 0.8rem;
+  padding: 0.15em 0.6em;
+  border-radius: 6px;
+  background: var(--color-moss);
+  color: var(--color-paper-light);
+}
+
+.status-badge.status-Behandlas {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+.status-badge.status-Återbetald {
+  background: var(--color-error);
+  color: var(--color-paper-light);
+}
+
+/* ADMIN — shared */
 .admin-products,
 .admin-orders {
   max-width: 900px;
@@ -727,7 +769,7 @@ a.product-card {
   border: 2px solid var(--color-ink);
 }
 
-/* ---- Admin: products ---- */
+/* Admin: products */
 .product-form {
   background: var(--color-paper-light);
   border: var(--border-thick);
@@ -832,7 +874,7 @@ a.product-card {
   font-size: 0.95rem;
 }
 
-/* ---- Admin: product image gallery ---- */
+/* Admin: product image gallery */
 .product-gallery-manager {
   background: var(--color-paper);
   border: 2px dashed var(--color-ink);
@@ -877,7 +919,7 @@ a.product-card {
   padding: 0.5em 1em;
 }
 
-/* ---- Admin: orders ---- */
+/* Admin: orders */
 .admin-order-row {
   background: var(--color-paper-light);
   border: var(--border-thick);

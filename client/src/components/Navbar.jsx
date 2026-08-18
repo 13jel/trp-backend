@@ -17,6 +17,7 @@ export default function Navbar() {
       <div className="navbar-links">
         <Link to="/products">Produkter</Link>
         {session && <Link to="/cart">Varukorg</Link>}
+        {session && <Link to="/account">Mina sidor</Link>}
         {isAdmin && <Link to="/admin/products">Admin</Link>}
         {session ? (
           <button onClick={handleSignOut}>Logga ut</button>

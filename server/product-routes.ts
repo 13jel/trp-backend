@@ -10,7 +10,10 @@ productsRouter.get("/", async (req: Request, res: Response) => {
     .from("products")
     .select("*")
     .eq("is_active", true);
-  if (error) return res.status(500).json({ error: error.message });
+  if (error) {
+    console.error("Fel vid hämtning av produkter:", error);
+    return res.status(500).json({ error: error.message });
+  }
   res.json(data);
 });
 

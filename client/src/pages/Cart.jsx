@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchCart, removeFromCart, updateCartItemQuantity } from '../api/cart';
 import { createOrder } from '../api/orders';
+import { fetchMyProfile } from '../api/account';
 
 export default function Cart() {
-  const { token, session, loading: authLoading } = useAuth();
+  const { user, token, session, loading: authLoading } = useAuth();
   const navigate = useNavigate();
 
   const [items, setItems] = useState([]);
@@ -28,7 +29,16 @@ export default function Cart() {
       .then(setItems)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, [authLoading, session, token, navigate]);
+
+    // Förifyll leveransadress med kundens sparade standardadress, om den finns
+    fetchMyProfile(user.id)
+      .then((profile) => {
+        if (profile.address) setShippingAddress(profile.address);
+      })
+      .catch(() => {
+        // Ingen adress sparad än, eller kunde inte hämtas — inget att göra, bara låt fältet vara tomt
+      });
+  }, [authLoading, session, token, navigate, user]);
 
   async function handleRemove(cartItemId) {
     try {
