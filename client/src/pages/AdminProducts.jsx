@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchAllProductsAdmin, createProduct, updateProduct, deleteProduct } from '../api/adminProducts';
 import ProductForm from '../components/ProductForm';
+import ProductGallery from '../components/ProductGallery';
 
 export default function AdminProducts() {
   const { token } = useAuth();
@@ -98,12 +99,15 @@ export default function AdminProducts() {
           {products.map((product) => (
             <li key={product.id}>
               {editingId === product.id ? (
-                <ProductForm
-                  initialProduct={product}
-                  mode="edit"
-                  onSubmit={(updates) => handleUpdate(product.id, updates)}
-                  onCancel={() => setEditingId(null)}
-                />
+                <div className="admin-edit-block">
+                  <ProductForm
+                    initialProduct={product}
+                    mode="edit"
+                    onSubmit={(updates) => handleUpdate(product.id, updates)}
+                    onCancel={() => setEditingId(null)}
+                  />
+                  <ProductGallery productId={product.id} />
+                </div>
               ) : (
                 <div className="admin-product-row">
                   <span>{product.name}</span>

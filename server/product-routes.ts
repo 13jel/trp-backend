@@ -17,9 +17,10 @@ productsRouter.get("/", async (req: Request, res: Response) => {
 productsRouter.get("/:id", async (req: Request, res: Response) => {
   const { data, error } = await supabaseAdmin
     .from("products")
-    .select("*")
+    .select("*, product_images(id, image_url, sort_order)")
     .eq("id", req.params.id)
     .eq("is_active", true)
+    .order("sort_order", { foreignTable: "product_images", ascending: true })
     .single();
   if (error) return res.status(404).json({ error: "Produkten hittades inte" });
   res.json(data);

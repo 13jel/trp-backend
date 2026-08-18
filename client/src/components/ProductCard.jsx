@@ -10,7 +10,7 @@ export default function ProductCard({ product }) {
   const [status, setStatus] = useState('idle');
 
   async function handleAddToCart(e) {
-    e.preventDefault(); // hindrar Link-navigeringen
+    e.preventDefault(); 
     e.stopPropagation();
 
     if (!session) {

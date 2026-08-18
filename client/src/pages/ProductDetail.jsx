@@ -11,6 +11,7 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const [status, setStatus] = useState('idle');
+  const [activeImage, setActiveImage] = useState(null);
 
   async function handleAddToCart() {
     if (!session) {
@@ -30,12 +31,37 @@ export default function ProductDetail() {
   if (loading) return <p>Laddar produkt...</p>;
   if (error || !product) return <p>Produkten kunde inte hittas.</p>;
 
+  const gallery = [
+    product.image_url,
+    ...(product.product_images?.map((i) => i.image_url) || []),
+  ].filter(Boolean);
+  const mainImage = activeImage || gallery[0];
+
   return (
     <div className="product-detail">
       <Link to="/products" className="back-link">← Tillbaka till produkter</Link>
 
       <div className="product-detail-layout">
-        {product.image_url && <img src={product.image_url} alt={product.name + ' - ' + product.description} />}
+        <div className="product-detail-gallery">
+          {mainImage && (
+            <img src={mainImage} alt={product.name} className="product-detail-main-image" />
+          )}
+
+          {gallery.length > 1 && (
+            <div className="product-detail-thumbs">
+              {gallery.map((url) => (
+                <button
+                  key={url}
+                  type="button"
+                  className={url === mainImage ? 'active' : ''}
+                  onClick={() => setActiveImage(url)}
+                >
+                  <img src={url} alt="" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         <div className="product-detail-info">
           <h1>{product.name}</h1>
