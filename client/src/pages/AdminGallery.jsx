@@ -75,6 +75,7 @@ export default function AdminGallery() {
     <div className="admin-products">
       <nav className="admin-subnav">
         <Link to="/admin/products">Produkter</Link>
+        <Link to="/admin/collections">Kollektioner</Link>
         <Link to="/admin/orders">Ordrar</Link>
         <Link to="/admin/gallery" className="active">Galleri</Link>
       </nav>

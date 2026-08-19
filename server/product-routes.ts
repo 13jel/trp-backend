@@ -8,19 +8,16 @@ const productsRouter = Router();
 productsRouter.get("/", async (req: Request, res: Response) => {
   const { data, error } = await supabaseAdmin
     .from("products")
-    .select("*")
+    .select("*, collections(id, name)")
     .eq("is_active", true);
-  if (error) {
-    console.error("Fel vid hämtning av produkter:", error);
-    return res.status(500).json({ error: error.message });
-  }
+  if (error) return res.status(500).json({ error: error.message });
   res.json(data);
 });
 
 productsRouter.get("/:id", async (req: Request, res: Response) => {
   const { data, error } = await supabaseAdmin
     .from("products")
-    .select("*, product_images(id, image_url, sort_order)")
+    .select("*, product_images(id, image_url, sort_order), collections(id, name)")
     .eq("id", req.params.id)
     .eq("is_active", true)
     .order("sort_order", { foreignTable: "product_images", ascending: true })
@@ -30,10 +27,10 @@ productsRouter.get("/:id", async (req: Request, res: Response) => {
 });
 
 productsRouter.post("/", requireAuth, requireAdmin, async (req: AuthRequest, res: Response) => {
-  const { name, description, price, stock, image_url, category, theme } = req.body;
+  const { name, description, price, stock, image_url, category, theme, collection_id } = req.body;
   const { data, error } = await supabaseAdmin
     .from("products")
-    .insert({ name, description, price, stock, image_url, category, theme })
+    .insert({ name, description, price, stock, image_url, category, theme, collection_id: collection_id || null })
     .select()
     .single();
   if (error) return res.status(500).json({ error: error.message });
@@ -41,9 +38,10 @@ productsRouter.post("/", requireAuth, requireAdmin, async (req: AuthRequest, res
 });
 
 productsRouter.put("/:id", requireAuth, requireAdmin, async (req: AuthRequest, res: Response) => {
+  const { name, description, price, stock, image_url, category, theme, collection_id } = req.body;
   const { data, error } = await supabaseAdmin
     .from("products")
-    .update(req.body)
+    .update({ name, description, price, stock, image_url, category, theme, collection_id: collection_id || null })
     .eq("id", req.params.id)
     .select()
     .single();

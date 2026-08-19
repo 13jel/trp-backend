@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useProduct } from '../hooks/useProduct';
 import { addToCart } from '../api/cart';
 import { parseThemes } from '../utils/theme';
+import { supabase } from '../api/supabaseClient';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -14,6 +15,21 @@ export default function ProductDetail() {
   const [status, setStatus] = useState('idle');
   const [activeImage, setActiveImage] = useState(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [collectionProducts, setCollectionProducts] = useState([]);
+
+  useEffect(() => {
+    if (!product?.collections?.id) {
+      setCollectionProducts([]);
+      return;
+    }
+    supabase
+      .from('products')
+      .select('id, name, image_url')
+      .eq('collection_id', product.collections.id)
+      .eq('is_active', true)
+      .neq('id', product.id)
+      .then(({ data }) => setCollectionProducts(data || []));
+  }, [product]);
 
   async function handleAddToCart() {
     if (!session) {
@@ -80,6 +96,20 @@ export default function ProductDetail() {
               <span key={theme} className="theme-tag">{theme}</span>
             ))}
           </div>
+        )}
+
+        {product.collections && collectionProducts.length > 0 && (
+          <section className="collection-section">
+            <h2>Del av kollektionen: {product.collections.name}</h2>
+            <div className="collection-items">
+              {collectionProducts.map((p) => (
+                <Link key={p.id} to={`/products/${p.id}`} className="collection-item">
+                  {p.image_url && <img src={p.image_url} alt={p.name} />}
+                  <span>{p.name}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
         )}
 
         {product.description && <p className="description">{product.description}</p>}

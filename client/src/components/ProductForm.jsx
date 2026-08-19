@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../api/supabaseClient';
+import { fetchCollections } from '../api/collections';
 import { uploadProductImage } from '../utils/image';
 
 const emptyProduct = {
@@ -19,8 +20,13 @@ export default function ProductForm({ initialProduct, mode = 'create', onSubmit,
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
-
+  const [collections, setCollections] = useState([]);
+  
   const isEditing = mode === 'edit';
+
+  useEffect(() => {
+    fetchCollections().then(setCollections).catch(() => {});
+  }, []);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -51,6 +57,7 @@ export default function ProductForm({ initialProduct, mode = 'create', onSubmit,
         image_url,
         price: parseFloat(form.price),
         stock: parseInt(form.stock, 10),
+        collection_id: form.collection_id || null,
       });
 
       if (!isEditing) {
@@ -134,6 +141,20 @@ export default function ProductForm({ initialProduct, mode = 'create', onSubmit,
           onChange={handleChange}
           placeholder="t.ex. Djur, Musik, Botanik"
         />
+      </label>
+
+      <label>
+        Kollektion (valfritt)
+        <select
+          name="collection_id"
+          value={form.collection_id || ''}
+          onChange={handleChange}
+        >
+          <option value="">Ingen kollektion</option>
+          {collections.map((c) => (
+            <option key={c.id} value={c.id}>{c.name}</option>
+          ))}
+        </select>
       </label>
 
       {error && <p className="form-error">{error}</p>}

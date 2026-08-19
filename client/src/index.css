@@ -1188,3 +1188,41 @@ a.product-card {
 .gallery-edit-form {
   text-align: left;
 }
+
+/* =============================================================
+   14. COLLECTIONS
+   ============================================================= */
+.collection-section {
+  max-width: 720px;
+  margin: 2.5rem auto 0;
+  padding: 0 1.5rem;
+}
+
+.collection-items {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.collection-item {
+  flex-shrink: 0;
+  width: 120px;
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+}
+
+.collection-item img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border: var(--border-thick);
+  border-radius: 8px;
+  margin-bottom: 0.4rem;
+}
+
+.collection-item span {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
