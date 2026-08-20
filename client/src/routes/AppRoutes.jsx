@@ -13,6 +13,7 @@ import AdminRoute from './AdminRoute';
 import Gallery from '../pages/Gallery';
 import AdminGallery from '../pages/AdminGallery';
 import AdminCollections from '../pages/AdminCollections';
+import About from '../pages/About';
 
 export default function AppRoutes() {
   return (
@@ -26,6 +27,7 @@ export default function AppRoutes() {
       <Route path="/account" element={ <PrivateRoute> <Account /> </PrivateRoute>} />
       <Route path="/gallery" element={<Gallery />} />
       <Route path="/admin/gallery" element={ <AdminRoute> <AdminGallery /> </AdminRoute> } />
+      <Route path="/about" element={<About />} />
 
       <Route
         path="/admin/products"
