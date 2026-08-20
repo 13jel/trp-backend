@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useProducts } from '../hooks/useProducts';
 import ProductCard from '../components/ProductCard';
 import { parseThemes } from '../utils/theme';
@@ -18,7 +19,9 @@ export default function ProductList() {
   const [activeType, setActiveType] = useState('Alla');
   const [activeTheme, setActiveTheme] = useState('Alla');
   const [sortKey, setSortKey] = useState('name-asc');
-  const [view, setView] = useState('grid'); // 'grid' | 'list'
+  const [view, setView] = useState('grid');
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get('search') || '');
 
   const themes = useMemo(() => {
     const unique = new Set(products.flatMap((p) => parseThemes(p.theme)));
@@ -26,9 +29,17 @@ export default function ProductList() {
   }, [products]);
 
   const filtered = products.filter((p) => {
+    const query = search.trim().toLowerCase();
+    const searchMatch =
+      !query ||
+      p.name.toLowerCase().includes(query) ||
+      (p.description && p.description.toLowerCase().includes(query)) ||
+      parseThemes(p.theme).some((t) => t.toLowerCase().includes(query));
+
     const typeMatch = activeType === 'Alla' || p.category === activeType;
     const themeMatch = activeTheme === 'Alla' || parseThemes(p.theme).includes(activeTheme);
-    return typeMatch && themeMatch;
+
+    return searchMatch && typeMatch && themeMatch;
   });
 
   const sorted = [...filtered].sort(SORT_OPTIONS[sortKey].compare);
@@ -40,6 +51,14 @@ export default function ProductList() {
   return (
     <div className="product-list">
       <h1>Produkter</h1>
+
+      <input
+        type="search"
+        className="product-search"
+        placeholder="Sök bland produkter..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
       <div className="filter-bar">
         <div className="filter-group">
@@ -109,7 +128,7 @@ export default function ProductList() {
       </div>
 
       {sorted.length === 0 ? (
-        <p>Inga produkter matchar filtret.</p>
+        <p>Inga produkter matchar din sökning/filter.</p>
       ) : (
         <div className={`product-grid view-${view}`}>
           {sorted.map((product) => (
