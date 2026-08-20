@@ -7,12 +7,12 @@ export default function Home() {
       <section className="hero">
         <h1>The Rooted Pages</h1>
         <p>Handgjorda posters, tapeter och tyger.</p>
+      <HeroCarousel />
         <Link to="/products" className="cta-button">
           Se produkter
         </Link>
       </section>
 
-      <HeroCarousel />
     </div>
   );
 }

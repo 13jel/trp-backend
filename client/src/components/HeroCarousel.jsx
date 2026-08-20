@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useProducts } from '../hooks/useProducts';
 
-const ROTATE_INTERVAL = 4500;
-const VISIBLE_COUNT = 3;
+const MAX_SLIDES = 12;
 
 function shuffle(array) {
   const result = [...array];
@@ -19,49 +18,33 @@ export default function HeroCarousel() {
 
   const slides = useMemo(() => {
     const withImages = products.filter((p) => p.image_url);
-    return shuffle(withImages).slice(0, 8);
+    return shuffle(withImages).slice(0, MAX_SLIDES);
   }, [products]);
-
-  const [start, setStart] = useState(0);
-
-  useEffect(() => {
-    if (slides.length <= VISIBLE_COUNT) return;
-    const timer = setInterval(() => {
-      setStart((prev) => (prev + 1) % slides.length);
-    }, ROTATE_INTERVAL);
-    return () => clearInterval(timer);
-  }, [slides.length]);
 
   if (loading || slides.length === 0) return null;
 
-  const visibleCount = Math.min(VISIBLE_COUNT, slides.length);
-  const visible = Array.from(
-    { length: visibleCount },
-    (_, i) => slides[(start + i) % slides.length]
-  );
+  // Loopens hastighet skalas efter antal bilder, så det känns lika lugnt oavsett hur många produkter som finns
+  const duration = Math.max(slides.length * 3, 20);
+
+  // Listan dubbleras så att loopen blir sömlös (när första kopian glidit ut har andra redan tagit vid)
+  const track = [...slides, ...slides];
 
   return (
-    <div className="hero-carousel">
-      <div className="hero-carousel-track">
-        {visible.map((product) => (
-          <Link to={`/products/${product.id}`} className="hero-carousel-slide" key={product.id}>
+    <div className="hero-marquee">
+      <div
+        className="hero-marquee-track"
+        style={{ '--marquee-duration': `${duration}s`, '--marquee-count': slides.length }}
+      >
+        {track.map((product, i) => (
+          <Link
+            to={`/products/${product.id}`}
+            className="hero-marquee-slide"
+            key={`${product.id}-${i}`}
+          >
             <img src={product.image_url} alt={product.name} />
           </Link>
         ))}
       </div>
-
-      {slides.length > visibleCount && (
-        <div className="hero-carousel-dots">
-          {slides.map((slide, i) => (
-            <button
-              key={slide.id}
-              className={i === start ? 'active' : ''}
-              onClick={() => setStart(i)}
-              aria-label={`Visa från ${slide.name}`}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 }
