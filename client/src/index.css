@@ -1311,6 +1311,16 @@ a.product-card {
   color: var(--color-moss-dark);
 }
 
+.footer-disclaimer {
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.footer-disclaimer a {
+  color: var(--color-moss-dark);
+}
+
 /* =============================================================
    16. ABOUT
    ============================================================= */
