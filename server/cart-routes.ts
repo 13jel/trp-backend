@@ -11,7 +11,7 @@ cartRouter.get("/", async (req: AuthRequest, res: Response) => {
   const sb = supabaseForUser(req.token!);
   const { data, error } = await sb
     .from("cart_items")
-    .select("id, quantity, product:products(id, name, price, image_url)")
+    .select("id, quantity, product:products(id, name, price, image_url, stock)")
     .eq("user_id", req.user!.id);
   if (error) return res.status(500).json({ error: error.message });
   res.json(data);

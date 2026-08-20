@@ -54,12 +54,17 @@ export default function Cart() {
       handleRemove(item.id);
       return;
     }
+    if (newQuantity > item.product.stock) {
+      setError(`Endast ${item.product.stock} st av "${item.product.name}" finns i lager.`);
+      return;
+    }
     setUpdatingId(item.id);
     try {
       await updateCartItemQuantity(token, item.product.id, newQuantity);
       setItems((prev) =>
         prev.map((i) => (i.id === item.id ? { ...i, quantity: newQuantity } : i))
       );
+      setError(null);
     } catch (err) {
       setError(err.message);
     } finally {
