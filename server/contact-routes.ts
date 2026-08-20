@@ -2,7 +2,6 @@ import { Router, Request, Response } from "express";
 import { sendMail } from "./mailer.js";
 
 const contactRouter = Router();
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 contactRouter.post("/", async (req: Request, res: Response) => {
   const { name, email, message } = req.body;
