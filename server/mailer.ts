@@ -1,7 +1,14 @@
 import nodemailer from "nodemailer";
+import dns from "dns";
+
+// Tvingar Node att föredra IPv4 vid uppslagning, annars försöker Render
+// nå Gmail via IPv6 vilket ger ENETUNREACH i Renders nätverksmiljö
+dns.setDefaultResultOrder("ipv4first");
 
 export const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_APP_PASSWORD,
