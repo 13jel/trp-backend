@@ -813,6 +813,16 @@ a.product-card {
   padding: 0.75rem 1rem;
 }
 
+.cart-item-name {
+  color: var(--color-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.cart-item-name:hover {
+  text-decoration: underline;
+}
+
 .quantity-control {
   display: flex;
   align-items: center;

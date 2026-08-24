@@ -22,12 +22,16 @@ export default function About() {
           "slantar" är påhittad för uppgiften. En bekräftelsefaktura skickas via mejl som en del
           av demonstrationen, men det är ingen riktig kvittens på köp.
         </p>
+        <p>
+          Om du skulle vilja köpa en tapet eller tygprodukt på riktigt finns de flesta sömlösa mönster att köpa
+          via min shop på <a href="https://www.spoonflower.com/profiles/therootedpages">Spoonflower</a>.
+        </p>
       </section>
 
       <section className="about-section">
         <h2>Galleriet är på riktigt</h2>
         <p>
-          Till skillnad från produkterna tar jag faktiskt emot riktiga förfrågningar via
+          Till skillnad från produkterna tar jag emot riktiga förfrågningar via
           kontaktformuläret i <a href="/gallery">galleriet</a> — om du vill beställa en
           logotyp eller liknande hör jag gärna av mig.
         </p>

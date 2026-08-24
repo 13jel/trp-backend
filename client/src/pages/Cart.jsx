@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchCart, removeFromCart, updateCartItemQuantity } from '../api/cart';
 import { createOrder } from '../api/orders';
@@ -124,7 +125,9 @@ export default function Cart() {
       <ul className="cart-items">
         {items.map((item) => (
           <li key={item.id} className="cart-item">
-            <span>{item.product.name}</span>
+            <Link to={`/products/${item.product.id}`} className="cart-item-name">
+              {item.product.name}
+            </Link>
 
             <div className="quantity-control">
               <button
