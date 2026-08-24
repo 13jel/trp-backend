@@ -1,8 +1,9 @@
 import { Router, Response } from "express";
-import { sendMail } from "./mailer.js";
 import { supabaseForUser, supabaseAdmin } from "./supabaseClient.js";
 import { requireAuth, requireAdmin } from "./middleware/auth.js";
 import { AuthRequest } from "./types.js";
+import { Resend } from "resend";
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const orderRouter = Router();
 
@@ -52,13 +53,14 @@ async function sendInvoiceEmail(email: string, order: any, cartItems: any[]) {
     .map((i) => `<tr><td>${i.product.name}</td><td>${i.quantity}</td><td>${i.product.price} slantar</td></tr>`)
     .join("");
 
-  await sendMail(
-    email,
-    `Faktura för order #${order.id}`,
-    `<h2>Tack för din beställning!</h2>
+  await resend.emails.send({
+    from: "onboarding@resend.dev",
+    to: email,
+    subject: `Faktura för order #${order.id}`,
+    html: `<h2>Tack för din beställning!</h2>
       <table border="1" cellpadding="6"><tr><th>Produkt</th><th>Antal</th><th>Pris</th></tr>${rows}</table>
-      <p><strong>Totalt: ${order.total} slantar</strong></p>`
-  );
+      <p><strong>Totalt: ${order.total} slantar</strong></p>`,
+  });
 }
 
 orderRouter.get("/", requireAdmin, async (req: AuthRequest, res: Response) => {

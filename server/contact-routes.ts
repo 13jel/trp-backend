@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
-import { sendMail } from "./mailer.js";
+import { Resend } from "resend";
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const contactRouter = Router();
 
@@ -11,14 +12,16 @@ contactRouter.post("/", async (req: Request, res: Response) => {
   }
 
   try {
-    await sendMail(
-      process.env.CONTACT_EMAIL!,
-      `Ny förfrågan från ${name} (The Rooted Pages)`,
-      `<p><strong>Namn:</strong> ${name}</p>
+    await resend.emails.send({
+      from: "onboarding@resend.dev",
+      to: process.env.CONTACT_EMAIL!,
+      replyTo: email,
+      subject: `Ny förfrågan från ${name} (The Rooted Pages)`,
+      html: `<p><strong>Namn:</strong> ${name}</p>
       <p><strong>E-post:</strong> ${email}</p>
       <p><strong>Meddelande:</strong></p>
-      <p>${message.replace(/\n/g, "<br>")}</p>`
-    );
+      <p>${message.replace(/\n/g, "<br>")}</p>`,
+    });
     res.status(200).json({ success: true });
   } catch (err: any) {
     console.error("Kunde inte skicka kontaktmejl:", err);
