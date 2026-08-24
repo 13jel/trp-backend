@@ -33,6 +33,7 @@ orderRouter.post("/", async (req: AuthRequest, res: Response) => {
   const orderItems = cartItems.map((i: any) => ({
     order_id: order.id,
     product_id: i.product.id,
+    product_name: i.product.name,
     quantity: i.quantity,
     unit_price: i.product.price,
   }));
